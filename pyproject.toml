@@ -23,10 +23,13 @@ dependencies = [
   "python-dotenv>=1.0.0",
   "tiktoken>=0.7.0",
   "numpy>=1.26.0",
-  # ElasticDash observability — tool/LLM call tracing. Gracefully no-ops
-  # when ELASTICDASH_PUBLIC_KEY isn't set, so it's safe to keep as a
-  # runtime dep even for users who don't want tracing.
-  "elasticdash>=0.0.4",
+  # ElasticDash SDK — runtime tracing (tools via @ed_tool, LLM calls via
+  # the httpx AI interceptor, workflow grouping via start_trace /
+  # end_trace). The `observability` extra pulls in python-socketio for
+  # the real-time backend connection. When ELASTICDASH_SERVER_URL is
+  # unset the REPL skips init_observability and every wrap_tool /
+  # wrap_ai surface becomes a pure passthrough.
+  "elasticdash-sdk[observability]>=0.1.2a2",
 ]
 
 [project.optional-dependencies]
@@ -34,9 +37,6 @@ test = [
   "pytest>=8.0.0",
   "pytest-asyncio>=0.23.0",
   "pytest-mock>=3.12.0",
-  # ElasticDash AI test framework (Python equivalent of `elasticdash-test`
-  # npm package) — provides @ai_test, trace recording, and AI mocking.
-  "elasticdash-test>=0.1.1",
 ]
 
 [project.scripts]

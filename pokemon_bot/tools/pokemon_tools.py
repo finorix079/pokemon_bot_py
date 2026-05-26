@@ -34,23 +34,28 @@ F = TypeVar("F", bound=Callable[..., Any])
 
 
 try:
-    from elasticdash import observe as _ed_observe  # type: ignore[import-not-found]
+    from elasticdash_test import ed_tool as _ed_tool  # type: ignore[import-not-found]
 except ImportError:  # pragma: no cover — SDK is a runtime dep but stay resilient
-    _ed_observe = None  # type: ignore[assignment]
+    _ed_tool = None  # type: ignore[assignment]
 
 
 def wrap_tool(name: str, fn: F) -> F:
-    """Wrap a tool function with ElasticDash telemetry.
+    """Register a tool with the ElasticDash SDK.
 
-    Uses the real `elasticdash.observe(as_type="tool", name=name)`
-    decorator when the SDK is installed. The decorator gracefully no-ops
-    when `ELASTICDASH_PUBLIC_KEY` isn't configured (the SDK logs a single
-    "Client will be disabled" line at startup and runs the wrapped
-    function as-is). Falls back to a passthrough if the SDK import fails.
+    Uses `elasticdash_test.ed_tool(name=…)` which:
+    1. Adds the function to the global rerun registry so the MCP server
+       and `elasticdash run-tool <name> --input '<json>'` CLI can locate
+       it for behaviour validation.
+    2. Wraps it with telemetry — every call emits a `tool` WorkflowEvent
+       inside the active observability context (`init_observability` +
+       `start_trace` are wired in `pokemon_bot/__main__.py`).
+
+    With no observability context the wrapper is a passthrough. Falls
+    back to a passthrough if the SDK import fails entirely.
     """
-    if _ed_observe is None:
+    if _ed_tool is None:
         return fn
-    return _ed_observe(name=name, as_type="tool")(fn)  # type: ignore[return-value]
+    return _ed_tool(name=name)(fn)  # type: ignore[return-value]
 
 
 async def maybe_await(value: Any) -> Any:

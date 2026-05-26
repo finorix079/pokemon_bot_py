@@ -64,41 +64,45 @@ template.
 | `OPENAPI_SCHEMAS_DIR` | No | (auto) | Override the OpenAPI schema directory (planner parameter mapping) |
 | `PROMPTS_DIR` | No | (bundled) | Override the prompt-file directory used by `fetch_prompt_file` |
 | `NEXT_PUBLIC_POKEAPI_BASE_URL` | No | `https://pokeapi.co/api/v2` | PokéAPI base URL (matches the TS env name for parity) |
-| `ELASTICDASH_PUBLIC_KEY` | No | — | Enables tool/LLM tracing. When unset the SDK no-ops cleanly. |
-| `ELASTICDASH_SECRET_KEY` | No | — | Paired with `_PUBLIC_KEY` |
-| `ELASTICDASH_BASE_URL` | No | — | Dashboard base URL |
-| `ELASTICDASH_DEBUG` | No | `false` | Verbose ElasticDash logging |
-| `ELASTICDASH_API_URL` | No | — | `elasticdash-test` framework endpoint (for `ai_test` runs) |
-| `ELASTICDASH_API_KEY` | No | — | `elasticdash-test` framework key |
-| `ELASTICDASH_CAPTURE_TRACE` | No | `0` | Capture mode for `ai_test` runs |
-| `ELASTICDASH_ACCEPT_RERUNS` | No | `0` | Accept mode for `ai_test` runs |
+| `ELASTICDASH_SERVER_URL` | No | — | ElasticDash backend URL. Setting this turns on observability — the REPL calls `init_observability` at boot and wraps each chat turn in a trace. |
+| `ELASTICDASH_API_KEY` | No | — | Project API key for the ElasticDash backend |
+| `ELASTICDASH_DEBUG` | No | `0` | Verbose SDK logging |
 
 ## ElasticDash integration
 
-Two pieces are wired into this project:
+The project uses the **`elasticdash-sdk`** Python package (import path
+`elasticdash_test`) for both runtime tracing and the test framework.
 
-1. **`elasticdash` Python SDK** (runtime dependency) — `wrap_tool` and `wrap_ai`
-   in `pokemon_bot/tools/pokemon_tools.py` and `pokemon_bot/utils/ai_handler.py`
-   delegate to `elasticdash.observe(as_type="tool" | "generation", name=...)`.
-   All seven tool callables (`apiService`, `queryRefinement`, `searchPokemon`,
-   `fetchPokemonDetails`, `searchMove`, `searchBerry`, `searchAbility`) and all
-   four LLM clients (`kimi_chat_completion`, `anthropic_chat_completion`,
-   `openai_chat_completion`, plus the streaming `anthropic_stream_text` indirectly)
-   become traceable when `ELASTICDASH_PUBLIC_KEY` is set. With no key set the SDK
-   logs one "Client will be disabled" line at startup and the wrappers no-op.
+1. **Tools** — every tool in `pokemon_bot/tools/pokemon_tools.py` is
+   registered through `elasticdash_test.ed_tool(name=...)`. The seven
+   exports (`apiService`, `queryRefinement`, `searchPokemon`,
+   `fetchPokemonDetails`, `searchMove`, `searchBerry`, `searchAbility`)
+   are added to the global rerun registry, so the MCP server and
+   `elasticdash run-tool <name> --input '<json>'` can re-execute them
+   against captured inputs. Each invocation inside an active trace is
+   emitted as a `tool` WorkflowEvent.
 
-2. **`elasticdash-test` Python framework** (test-time dependency) — installed
-   under the `[test]` extras. Provides `@ai_test`, trace recording, and AI
-   mocking helpers; equivalent of the `elasticdash-test` npm package used in
-   the TypeScript project.
+2. **LLM calls** — captured by the SDK's httpx interceptor (installed
+   automatically by `init_observability`). The `anthropic` and `openai`
+   Python clients both ride on httpx, so every call from
+   `kimi_chat_completion` (OpenAI client → `api.moonshot.cn/v1/chat/completions`),
+   `anthropic_chat_completion`, `openai_chat_completion` (Claude dispatcher),
+   and the streaming `anthropic_stream_text` is recorded as an `ai`
+   WorkflowEvent without explicit decoration.
 
-3. **ElasticDash MCP server** — configured in `.mcp.json` at the project root,
-   pointing at the same local Node MCP at
-   `/Users/jiangjiahao/Documents/GitHub/ElasticDash-MCP/mcp-server/server.ts`
-   that the TypeScript project uses. When you open Claude Code in this
-   directory, the `mcp__elasticdash-mcp__*` tools (search_traces,
-   get_trace_details, rerun_step, get_recent_traces) become available
-   automatically.
+3. **Workflows** — `pokemon_bot/__main__.py` calls
+   `init_observability(ObservabilityOptions(server_url=..., api_key=...))`
+   once at REPL boot and `start_trace("pokemon_chat") / end_trace()`
+   around each turn, so every tool + LLM event for a turn shares the
+   same `trace_id`. With `ELASTICDASH_SERVER_URL` unset, both calls
+   become no-ops and the REPL runs with tracing disabled.
+
+4. **MCP server** — configured in `.mcp.json` at the project root,
+   pointing at the local Node MCP at
+   `/Users/jiangjiahao/Documents/GitHub/ElasticDash-MCP/mcp-server/server.ts`.
+   When you open Claude Code in this directory, the
+   `mcp__elasticdash-mcp__*` tools (`search_traces`, `get_trace_details`,
+   `rerun_step`, `get_recent_traces`) become available automatically.
 
 > **Migration note (2026-05-26):** the chat-completion path was switched
 > from OpenAI to Anthropic Claude. `OPENAI_API_KEY` and `AI_PROVIDER` are

@@ -5,6 +5,7 @@ pydantic>=2.7.0
 python-dotenv>=1.0.0
 tiktoken>=0.7.0
 numpy>=1.26.0
+elasticdash-sdk[observability]>=0.1.2a2
 
 [test]
 pytest>=8.0.0

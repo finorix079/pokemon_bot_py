@@ -41,30 +41,46 @@ from .. import config as _config
 T = TypeVar("T", bound=Callable[..., Any])
 
 # ============================================================
-# wrap_ai — passthrough decorator (replaces ElasticDash wrapAI telemetry)
+# wrap_ai — ElasticDash LLM-call telemetry
 # ============================================================
+#
+# Two complementary mechanisms cover the LLM surface:
+#
+# 1. **httpx auto-interception** (preferred). `init_observability` in
+#    `pokemon_bot/__main__.py` installs ElasticDash's httpx interceptor,
+#    which captures every request matching its provider heuristics
+#    (`/v1/chat/completions`, `anthropic.com`, `/v1/messages`, etc.).
+#    The Python `anthropic` and `openai` SDKs both ride on httpx, so
+#    `anthropic_chat_completion`, `kimi_chat_completion` (OpenAI client
+#    against the Moonshot endpoint), and `anthropic_stream_text` are
+#    all auto-recorded. No manual decorator needed.
+#
+# 2. **Explicit `wrap_ai`** (kept for parity and for any future LLM
+#    client that bypasses httpx). The helper below delegates to
+#    `elasticdash_test.interceptors.wrap_ai`, which records the full
+#    function-level input/output pair as a single `ai` WorkflowEvent.
+#    Use it only for providers the httpx interceptor doesn't cover —
+#    otherwise the dashboard will see a duplicate event per LLM call.
 
 
 try:
-    from elasticdash import observe as _ed_observe  # type: ignore[import-not-found]
+    from elasticdash_test.interceptors import wrap_ai as _ed_wrap_ai  # type: ignore[import-not-found]
 except ImportError:  # pragma: no cover — SDK is a runtime dep but stay resilient
-    _ed_observe = None  # type: ignore[assignment]
+    _ed_wrap_ai = None  # type: ignore[assignment]
 
 
 def wrap_ai(name: str, fn: T, options: Optional[dict[str, str]] = None) -> T:
-    """Wrap an LLM call with ElasticDash generation telemetry.
+    """Record an LLM call as an `ai` event in the active trace.
 
-    Uses `elasticdash.observe(as_type="generation", name=name)` when the
-    SDK is available; falls back to a passthrough otherwise. Model /
-    provider metadata in `options` is currently informational only — the
-    Python SDK reads model info from the call site rather than the
-    decorator. The decorator no-ops cleanly when ElasticDash isn't
-    configured (no public key).
+    Forwards to `elasticdash_test.interceptors.wrap_ai`. `options` carries
+    optional provider/model metadata — only `provider` is used by the SDK;
+    `model` is informational and the recorded event keys on `name` instead.
+    Falls back to a passthrough if the SDK is missing.
     """
-    _ = options
-    if _ed_observe is None:
+    if _ed_wrap_ai is None:
         return fn
-    return _ed_observe(name=name, as_type="generation")(fn)  # type: ignore[return-value]
+    provider = (options or {}).get("provider")
+    return _ed_wrap_ai(name, fn, provider=provider)  # type: ignore[return-value]
 
 
 # ============================================================
@@ -677,21 +693,15 @@ async def openai_chat_completion(**kwargs: Any) -> str:
     return await anthropic_chat_completion(**kwargs)
 
 
-# Apply ElasticDash generation tracing to the three LLM clients now that
-# they're defined. Wrapping after definition (rather than via decorator)
-# lets the no-SDK fallback path keep the original function identity for
-# tests that monkeypatch by attribute reference.
-kimi_chat_completion = wrap_ai(
-    "kimi-k2", kimi_chat_completion, {"model": "kimi-k2-turbo-preview", "provider": "kimi"}
-)
-anthropic_chat_completion = wrap_ai(
-    "claude-sonnet-4-5",
-    anthropic_chat_completion,
-    {"model": "claude-sonnet-4-5-20250929", "provider": "anthropic"},
-)
-openai_chat_completion = wrap_ai(
-    "claude-sonnet-4-5", openai_chat_completion, {"provider": "anthropic"}
-)
+# Note: `kimi_chat_completion`, `anthropic_chat_completion`, and
+# `openai_chat_completion` are intentionally NOT wrapped here. Their
+# underlying HTTP calls go through httpx (the `anthropic` and `openai`
+# Python SDKs both build on it), and ElasticDash's `install_ai_interceptor`
+# — installed inside `init_observability` — patches
+# `httpx.AsyncClient.send` / `httpx.Client.send` to record every request
+# whose URL matches its provider heuristics (`anthropic.com`,
+# `/v1/messages`, `/v1/chat/completions`). Wrapping these functions
+# again would emit duplicate events for the same call.
 
 
 # ============================================================
