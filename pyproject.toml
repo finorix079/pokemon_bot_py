@@ -1,0 +1,51 @@
+# Pokémon Bot — Python CLI port of the open-react-template chatbot pipeline.
+# Generated from: open-react-template/{app/api/chat-stream,app/api/chat,services,utils,ed_tools.ts}
+# Purpose: provide an interactive REPL chatbot over the PokéAPI tools, mirroring
+# the behaviour of the Next.js /api/chat-stream route.
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pokemon-bot"
+version = "0.1.0"
+description = "Interactive REPL chatbot over the PokéAPI — Python port of the open-react-template chat pipeline."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Terry Jiang", email = "terryjiang1996@gmail.com" }]
+dependencies = [
+  "anthropic>=0.39.0",
+  "openai>=1.50.0",
+  "httpx>=0.27.0",
+  "pydantic>=2.7.0",
+  "python-dotenv>=1.0.0",
+  "tiktoken>=0.7.0",
+  "numpy>=1.26.0",
+  # ElasticDash observability — tool/LLM call tracing. Gracefully no-ops
+  # when ELASTICDASH_PUBLIC_KEY isn't set, so it's safe to keep as a
+  # runtime dep even for users who don't want tracing.
+  "elasticdash>=0.0.4",
+]
+
+[project.optional-dependencies]
+test = [
+  "pytest>=8.0.0",
+  "pytest-asyncio>=0.23.0",
+  "pytest-mock>=3.12.0",
+  # ElasticDash AI test framework (Python equivalent of `elasticdash-test`
+  # npm package) — provides @ai_test, trace recording, and AI mocking.
+  "elasticdash-test>=0.1.1",
+]
+
+[project.scripts]
+pokemon-bot = "pokemon_bot.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["pokemon_bot*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"

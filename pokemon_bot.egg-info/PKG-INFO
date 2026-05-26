@@ -1,0 +1,260 @@
+Metadata-Version: 2.4
+Name: pokemon-bot
+Version: 0.1.0
+Summary: Interactive REPL chatbot over the PokéAPI — Python port of the open-react-template chat pipeline.
+Author-email: Terry Jiang <terryjiang1996@gmail.com>
+License: MIT
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: anthropic>=0.39.0
+Requires-Dist: openai>=1.50.0
+Requires-Dist: httpx>=0.27.0
+Requires-Dist: pydantic>=2.7.0
+Requires-Dist: python-dotenv>=1.0.0
+Requires-Dist: tiktoken>=0.7.0
+Requires-Dist: numpy>=1.26.0
+Provides-Extra: test
+Requires-Dist: pytest>=8.0.0; extra == "test"
+Requires-Dist: pytest-asyncio>=0.23.0; extra == "test"
+Requires-Dist: pytest-mock>=3.12.0; extra == "test"
+
+# pokemon-bot
+
+Interactive REPL chatbot over the [PokéAPI](https://pokeapi.co/), ported from the
+TypeScript `/api/chat-stream` route in `open-react-template`.
+
+## Quick start
+
+```bash
+# 1. Create a venv and install
+python3 -m venv .venv
+.venv/bin/pip install -e ".[test]"
+
+# 2. Configure API keys
+cp .env.example .env
+# Edit .env and fill in OPENAI_API_KEY, ANTHROPIC_API_KEY, KIMI_API_KEY
+
+# 3. Run
+.venv/bin/python -m pokemon_bot
+```
+
+You'll see the banner and a `you ❯` prompt. Type a question and press Enter:
+
+```text
+pokemon-bot — interactive PokéAPI assistant
+Type a question and press Enter. Use /exit or Ctrl+D to quit.
+
+you ❯ What's the speed stat of Raichu?
+[status] Analysing your request…
+[status] Refining query…
+[status] Searching relevant data sources…
+[status] Building execution plan…
+[status] Running read-only queries…
+[status] Generating answer…
+────────────────────────────────────────────────────────────
+Raichu's speed stat is 110…
+────────────────────────────────────────────────────────────
+you ❯ /exit
+```
+
+## CLI commands
+
+| Command | Effect |
+|---|---|
+| `/exit`, `/quit`, `/bye` | Leave the REPL |
+| `/clear` | Reset conversation history + session |
+| Ctrl+D | EOF — same as `/exit` |
+| Ctrl+C | Interrupt — exit with code 130 |
+
+The REPL keeps a multi-turn history in memory. Follow-ups like "show me its moves"
+work because conversation context is fed back into the query-refinement stage.
+
+## Environment variables
+
+Loaded from `.env` (via `python-dotenv`) or the shell. See `.env.example` for the
+template.
+
+| Variable | Required | Default | Used by |
+|---|---|---|---|
+| `ANTHROPIC_API_KEY` | **Yes** | — | Every chat-completion call (planner, validator, executor synthesis, query refinement, placeholder resolver) **and** the final-answer token streaming |
+| `KIMI_API_KEY` | Recommended | — | Kimi extraction step (`kimi-k2-turbo-preview`) inside the executor |
+| `KIMI_BASE_URL` | No | `https://api.moonshot.cn/v1` | Kimi endpoint override |
+| `ANTHROPIC_MODEL` | No | `claude-sonnet-4-5-20250929` | Anthropic model id |
+| `KIMI_MODEL` | No | `moonshot-v1-32k` | Kimi model id (overridden by hard-coded `kimi-k2-turbo-preview` inside the call for parity with TS) |
+| `OPENAPI_SCHEMAS_DIR` | No | (auto) | Override the OpenAPI schema directory (planner parameter mapping) |
+| `PROMPTS_DIR` | No | (bundled) | Override the prompt-file directory used by `fetch_prompt_file` |
+| `NEXT_PUBLIC_POKEAPI_BASE_URL` | No | `https://pokeapi.co/api/v2` | PokéAPI base URL (matches the TS env name for parity) |
+
+> **Migration note (2026-05-26):** the chat-completion path was switched
+> from OpenAI to Anthropic Claude. `OPENAI_API_KEY` and `AI_PROVIDER` are
+> no longer used — set only `ANTHROPIC_API_KEY` (plus `KIMI_API_KEY` for
+> the extraction step). The historical `openai_chat_completion(...)`
+> function name is preserved as a dispatcher that always forwards to
+> Claude, so internal call sites and the planner / validator / executor
+> prompts are unchanged.
+
+## How it works
+
+The pipeline mirrors the TypeScript `/api/chat-stream` POST handler stage-for-stage:
+
+```text
+user input
+   │
+   ▼
+[message_utils] summarize_messages → filter_plan_messages
+   │
+   ▼
+[handler] follow-up detection + conversation-context build
+   │
+   ▼
+[tools/pokemon_tools] queryRefinement  ─→  Claude (system prompt: byte-identical to TS)
+   │
+   ▼
+[chat_planner_service] get_all_matched_apis  →  get_top_k_results
+   │  (static PokéAPI tool catalog, no embeddings)
+   ▼
+[chat/planner] send_to_planner
+   │  Step 0: goal-completion check         (Claude — Claude-tuned prompt)
+   │  Step 1: next-action intent             (Kimi)
+   │  Step 2: keyword-based RAG retrieval
+   │  Step 3: planner LLM with prompt-planner.txt  (Claude)
+   ▼
+[chat/validators] detect_resolution_vs_execution (Kimi)
+   │
+   ▼
+[chat/executor] execute_iterative_planner
+   │  • fetchPokemonDetails / searchPokemon / searchMove / searchAbility / searchBerry
+   │  • per-step Kimi useful-data extraction
+   │  • validator re-plan loop (Claude)
+   │  • fan-out + depends_on_step propagation + placeholder resolution
+   ▼
+[handler] _stream_final_answer
+   │  Claude (anthropic.messages.stream)
+   ▼
+stdout (one token at a time)
+```
+
+All prompts, default temperatures, max-token caps, retry counts, and stop conditions
+are preserved verbatim from the TypeScript source.
+
+## Project layout
+
+```text
+pokemon_bot/
+├── __main__.py            # REPL entry point
+├── config.py              # env loading
+├── chat/
+│   ├── handler.py         # pipeline orchestration (ports chat-stream/route.ts)
+│   ├── executor.py        # iterative planner loop (ports chat/executor.ts)
+│   ├── planner.py         # autonomous planner workflow
+│   ├── planner_utils.py   # plan sanitiser + placeholder resolution
+│   ├── validators.py      # intent classifier + goal-completion validator
+│   ├── message_utils.py   # summarisation + plan-message filtering
+│   └── session.py         # in-memory pending-plan store + session-id hash
+├── services/
+│   ├── pokemon_service.py        # PokéAPI clients (5 tools + watchlist stubs)
+│   ├── api_service.py            # dynamic API request executor
+│   ├── api_schema_loader.py      # OpenAPI parameter lookup
+│   ├── parameter_mapper.py       # planner-param → API-param matcher (incl. fan-out)
+│   ├── chat_planner_service.py   # RAG retrieval + planner support utilities
+│   ├── pokemon_rag_service.py    # static PokéAPI tool catalog
+│   ├── task_service.py           # task / message dataclasses
+│   └── type_style_service.py     # type → Tailwind class map (frontend parity)
+├── tools/
+│   └── pokemon_tools.py   # named-tool registry (port of ed_tools.ts)
+├── utils/
+│   ├── ai_handler.py      # OpenAI / Kimi / Anthropic clients + agent runtime
+│   ├── query_refinement.py
+│   └── cli_stream.py      # stdout status / token writers
+├── schemas/
+│   └── ai.py              # pydantic models (ported from Zod schemas/ai.ts)
+└── prompts/               # bundled prompt assets (planner / executor / verifier)
+    ├── api-index.json
+    ├── prompt-executor.txt
+    ├── prompt-planner-table.txt
+    ├── prompt-planner.txt
+    ├── prompt-verifier.txt
+    └── prompt.txt
+```
+
+## Provenance
+
+| Python module | TypeScript origin |
+|---|---|
+| `pokemon_bot.chat.handler` | `app/api/chat-stream/route.ts` |
+| `pokemon_bot.chat.executor` | `app/api/chat/executor.ts` |
+| `pokemon_bot.chat.planner` | `app/api/chat/planner.ts` |
+| `pokemon_bot.chat.planner_utils` | `app/api/chat/plannerUtils.ts` |
+| `pokemon_bot.chat.validators` | `app/api/chat/validators.ts` |
+| `pokemon_bot.chat.message_utils` | `app/api/chat/messageUtils.ts` |
+| `pokemon_bot.chat.session` | `app/api/chat/session.ts` |
+| `pokemon_bot.services.pokemon_service` | `services/pokemonService.ts` |
+| `pokemon_bot.services.api_service` | `services/apiService.ts` |
+| `pokemon_bot.services.chat_planner_service` | `services/chatPlannerService.ts` |
+| `pokemon_bot.services.parameter_mapper` | `services/parameterMapper.ts` |
+| `pokemon_bot.services.api_schema_loader` | `services/apiSchemaLoader.ts` |
+| `pokemon_bot.services.pokemon_rag_service` | `services/pokemonRagService.ts` |
+| `pokemon_bot.utils.ai_handler` | `utils/aiHandler.ts` |
+| `pokemon_bot.utils.query_refinement` | `utils/queryRefinement.ts` |
+| `pokemon_bot.tools.pokemon_tools` | `ed_tools.ts` |
+| `pokemon_bot.schemas.ai` | `schemas/ai.ts` |
+
+## What was intentionally dropped
+
+The CLI port omits infrastructure that doesn't belong in a single-process REPL:
+
+- **HTTP / SSE** — no Next.js route, no Vercel AI data-stream wire framing
+- **Plan-approval gate** — all five PokéAPI tools are read-only, so the approval
+  branch in `chat-stream/route.ts:575-693` is dead code; it is not ported
+- **ElasticDash `wrapTool` / `wrapAI`** — replaced with passthrough decorators
+- **Langfuse tracing** — no observability backend in the CLI
+- **`conversationDb` file-backed session store** — replaced with the in-memory
+  `pending_plans` dict; sessions don't survive process exit
+
+## Tests
+
+```bash
+.venv/bin/python -m pytest
+```
+
+The smoke tests mock all three LLM providers and the PokéAPI HTTP layer.
+They verify:
+
+1. The OpenAI / Kimi / Anthropic system prompts are byte-identical to the TS source
+2. The "extra stats" `IMPORTANT: …` user-message block in `generate_final_answer`
+   is preserved verbatim (per the port requirement)
+3. `clarify_and_refine_user_input` parses the LLM response correctly and falls
+   back to documented defaults on malformed output
+4. The full pipeline runs end-to-end for "what's the speed of Raichu?" and the
+   clarification short-circuit emits a result without streaming tokens
+
+## Migration: OpenAI → Claude (2026-05-26)
+
+The chat-completion path was switched from OpenAI to Anthropic Claude. Effective changes:
+
+| Area | Before | After |
+|---|---|---|
+| Required env | `OPENAI_API_KEY` + `ANTHROPIC_API_KEY` | `ANTHROPIC_API_KEY` only |
+| Dispatcher env | `AI_PROVIDER=openai`/`anthropic` (default `openai`) | removed; Claude is the sole provider |
+| Planner / validator / synthesis / refinement / placeholder LLM | OpenAI (`gpt-4o-mini`) | Claude (`claude-sonnet-4-5-20250929`) |
+| Final-answer streaming | Claude (already) | Claude (unchanged) |
+| Kimi extraction | Kimi `kimi-k2-turbo-preview` | Kimi `kimi-k2-turbo-preview` (unchanged) |
+| Public function `openai_chat_completion(...)` | dispatched on `AI_PROVIDER` | **always** forwards to Claude (historical name kept so call sites don't churn) |
+| Prompts | byte-identical to TS source | byte-identical, with **one** Claude-tuning patch in `chat/planner.py` Step 0 (goal-completion check) that makes the strict-token expectation robust to Claude's tendency to wrap responses in conversational preamble |
+
+The `openai` Python SDK is still listed as a dependency because the Kimi client uses it as an OpenAI-compatible HTTP wrapper against `KIMI_BASE_URL`. Removing it would require swapping in plain `httpx` for the Kimi call — out of scope for this migration.
+
+## Known issue carried over from the TypeScript source
+
+`generate_final_answer` in `pokemon_bot/chat/executor.py:_FINAL_ANSWER_SYSTEM_PROMPT`
+plus its user-message `IMPORTANT: …` block is the root cause of an "extra stats"
+bug — when a user asks for one stat (e.g. *"What's the speed of Raichu?"*) the
+synthesis LLM tends to also enumerate `attack` / `defense` / etc. This was
+root-caused in the TypeScript repo before the port. The user explicitly asked
+for all prompts to be carried over verbatim, so the bug is preserved here too.
+See `executor.py` line 215+ for the marked code and `tests/test_executor_prompt.py`
+for the test that anchors the prompt text in place.
+
+## Licence
+
+MIT

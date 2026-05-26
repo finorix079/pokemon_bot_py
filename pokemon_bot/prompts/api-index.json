@@ -1,0 +1,78 @@
+{
+  "api_name": "ElasticDash API",
+  "version": "1.0.0",
+  "base_url": "https://api.elasticdash.com",
+  "description": "Complete API documentation for ElasticDash platform",
+  "modules": [
+    {
+      "id": "ability",
+      "name": "Ability",
+      "file": "openapi-doc/openapi-ability.json",
+      "description": "Endpoints for retrieving Pokémon ability data",
+      "keywords": ["ability", "search", "id", "name", "effect"],
+      "endpoints_count": 1
+    },
+    {
+      "id": "admin",
+      "name": "Admin",
+      "file": "openapi-doc/openapi-admin.json",
+      "description": "Admin management endpoints for ElasticDash platform",
+      "keywords": ["admin", "administrator", "manage", "system", "dashboard", "control"],
+      "endpoints_count": 2
+    },
+    {
+      "id": "auth",
+      "name": "Authentication",
+      "file": "openapi-doc/openapi-auth.json",
+      "description": "Authentication endpoints for ElasticDash platform",
+      "keywords": ["login", "logout", "register", "signup", "signin", "authentication", "session", "token", "password"],
+      "endpoints_count": 2
+    },
+    {
+      "id": "general",
+      "name": "General",
+      "file": "openapi-doc/openapi-general.json",
+      "description": "General utility endpoints for ElasticDash platform",
+      "keywords": ["general", "utility", "misc", "common", "helper"],
+      "endpoints_count": 1
+    },
+    {
+      "id": "move",
+      "name": "Move",
+      "file": "openapi-doc/openapi-move.json",
+      "description": "Endpoints for retrieving Pokémon move data",
+      "keywords": ["move", "search", "id", "name", "power", "accuracy"],
+      "endpoints_count": 1
+    },
+    {
+      "id": "plan",
+      "name": "Plans & Subscriptions",
+      "file": "openapi-doc/openapi-plan.json",
+      "description": "Subscription and plan management endpoints",
+      "keywords": ["plan", "subscription", "billing", "payment", "pricing", "upgrade", "tier"],
+      "endpoints_count": 1
+    },
+    {
+      "id": "pokemon",
+      "name": "Pokémon",
+      "file": "openapi-doc/openapi-pokemon.json",
+      "description": "Pokémon-related endpoints for ElasticDash platform",
+      "keywords": ["pokemon", "search", "id", "name", "details"],
+      "endpoints_count": 1
+    },
+    {
+      "id": "user",
+      "name": "User Management",
+      "file": "openapi-doc/openapi-user.json",
+      "description": "User management endpoints for ElasticDash platform",
+      "keywords": ["user", "profile", "account", "settings", "preferences", "avatar", "personal"],
+      "endpoints_count": 1
+    }
+  ],
+  "usage_instructions": {
+    "step_1": "First, review this index to understand available API modules",
+    "step_2": "Identify which module(s) are relevant to the user's request based on keywords and descriptions",
+    "step_3": "Request the detailed documentation for only the relevant module(s) using the 'file' path",
+    "step_4": "Use the detailed documentation to construct appropriate API calls"
+  }
+}
