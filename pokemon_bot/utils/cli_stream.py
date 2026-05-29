@@ -15,12 +15,26 @@ No SSE / "v1" wire framing — those only matter for the HTTP client.
 from __future__ import annotations
 
 import sys
+from typing import TextIO
+
+
+# Capture the real terminal stdout at import time. `pokemon_bot.__main__`
+# redirects `sys.stdout` to a log file for the duration of the REPL so
+# stray pipeline `print()`s land in `.temp/logs/` instead of overlaying
+# the prompt; the writers below bypass that redirect so banner, status,
+# and streamed tokens still reach the user.
+_REAL_STDOUT: TextIO = sys.stdout
+
+
+def real_stdout() -> TextIO:
+    """Return the terminal-bound stdout captured at import time."""
+    return _REAL_STDOUT
 
 
 def _write(line: str, *, end: str = "\n", flush: bool = True) -> None:
-    sys.stdout.write(line + end)
+    _REAL_STDOUT.write(line + end)
     if flush:
-        sys.stdout.flush()
+        _REAL_STDOUT.flush()
 
 
 def write_status(message: str) -> None:
@@ -30,8 +44,8 @@ def write_status(message: str) -> None:
 
 def write_token(token: str) -> None:
     """Stream a single token of the final answer to stdout."""
-    sys.stdout.write(token)
-    sys.stdout.flush()
+    _REAL_STDOUT.write(token)
+    _REAL_STDOUT.flush()
 
 
 def write_answer_header() -> None:
@@ -61,6 +75,7 @@ def write_error(message: str) -> None:
 
 
 __all__ = [
+    "real_stdout",
     "write_status",
     "write_token",
     "write_answer_header",

@@ -19,12 +19,11 @@ Pipeline preserved verbatim:
   3. conversation context build (token-capped slice of recent messages)
   4. query refinement
   5. RAG: get_all_matched_apis → get_top_k_results
-  6. planner_agent (warm-up trace observation)
-  7. run_planner_with_inputs (LLM-driven plan)
-  8. detect_resolution_vs_execution → optional table-only re-plan
-  9. clarification short-circuit
- 10. execute_iterative_planner (read-only branch)
- 11. stream_final_answer
+  6. run_planner_with_inputs (LLM-driven plan)
+  7. detect_resolution_vs_execution → optional table-only re-plan
+  8. clarification short-circuit
+  9. execute_iterative_planner (read-only branch)
+ 10. stream_final_answer
 """
 
 from __future__ import annotations
@@ -41,7 +40,7 @@ from ..services.chat_planner_service import (
     serialize_useful_data_in_order,
 )
 from ..tools.pokemon_tools import queryRefinement as _queryRefinementTool, maybe_await
-from ..utils.ai_handler import anthropic_stream_text, planner_agent
+from ..utils.ai_handler import anthropic_stream_text
 from ..utils.query_refinement import handle_query_concepts_and_needs
 from .executor import execute_iterative_planner
 from .message_utils import filter_plan_messages, summarize_messages, summarize_message
@@ -118,26 +117,38 @@ async def _stream_final_answer(
     useful_data: Optional[str],
     executed_steps_summary: Optional[str],
     on_token: Callable[[str], None],
+    conversation_context: str = "",
 ) -> dict[str, Any]:
     """Generate + stream the final answer.
 
-    Replaces TS `streamFinalAnswer` (chat-stream/route.ts:176-201). The
-    Anthropic system prompt and user-content shape are preserved
-    byte-for-byte; only the streaming mechanism differs (Python anthropic
-    SDK's `messages.stream` vs Vercel AI SDK's `streamText`).
+    `conversation_context` (when non-empty) is shown to the LLM as
+    continuity material — references like "it"/"that" can be resolved, and
+    the model may briefly acknowledge prior topics. The system prompt
+    instructs it to keep the answer focused on the current question and
+    not to volunteer comparisons unless the user asked for one.
     """
-    user_content = (
-        f"Question: {refined_query}\n\nData collected:\n{useful_data}\n\n"
-        f"Execution result: {executor_message}"
-        if useful_data
-        else f"Question: {refined_query}\n\nExecution result: {executor_message}"
-    )
+    parts: list[str] = []
+    if conversation_context:
+        parts.append(f"Recent conversation:\n{conversation_context}")
+    parts.append(f"Current question: {refined_query}")
+    if useful_data:
+        parts.append(f"Data collected:\n{useful_data}")
+    parts.append(f"Execution result: {executor_message}")
+    user_content = "\n\n".join(parts)
+
     messages = [
         {
             "role": "system",
             "content": (
-                "You are a helpful assistant. Synthesise the execution result into "
-                "a clear, concise answer for the user."
+                "You are a helpful assistant. Synthesise the execution result "
+                "into a clear, concise answer to the user's most recent "
+                "question. Use any recent conversation shown to resolve "
+                "references and to ground the answer — including drawing "
+                "natural comparisons to previously-discussed entities when "
+                "it's useful (e.g. comparing a Pokémon's stat to one asked "
+                "about earlier). Prioritise the current question, but feel "
+                "free to connect the answer to prior topics when it helps "
+                "the user."
             ),
         },
         {"role": "user", "content": user_content},
@@ -272,7 +283,6 @@ async def run_chat_pipeline(
 
     # --- Planning ---
     on_status("Building execution plan…")
-    await planner_agent(refined_query, {"userToken": user_token})
 
     try:
         planner_result = await run_planner_with_inputs(
@@ -388,6 +398,7 @@ async def run_chat_pipeline(
             useful_data=None,
             executed_steps_summary=steps_summary,
             on_token=on_token,
+            conversation_context=conversation_context,
         )
         return PipelineResult(
             message=final["text"],
@@ -410,6 +421,7 @@ async def run_chat_pipeline(
             useful_data=useful_data_str,
             executed_steps_summary=None,
             on_token=on_token,
+            conversation_context=conversation_context,
         )
         return PipelineResult(
             message=final["text"],

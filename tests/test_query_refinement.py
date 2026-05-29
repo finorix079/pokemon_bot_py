@@ -65,6 +65,44 @@ def test_degraded_path_falls_back(llm_recorder) -> None:
     assert result["intentType"] == "FETCH"
 
 
+def test_blank_lines_between_sections_still_parse(llm_recorder) -> None:
+    """LLM sometimes returns a blank line between each section header.
+
+    Reproduces the turn-2 bug where the parser failed silently and let the
+    entire `Previous context: … Current query: …` blob fall through as
+    `refinedQuery` / `entities`, which then poisoned the final-answer LLM.
+    """
+    response = (
+        "Refined Query: What is the base attack stat of Raichu?\n"
+        "\n"
+        "Language: en\n"
+        "\n"
+        'Concepts: ["pokemon stats", "base attack", "Raichu"]\n'
+        "\n"
+        'API Needs: ["pokemon details retrieval", "stat information"]\n'
+        "\n"
+        'Entities: ["raichu", "pokemon base stats", "Raichu details"]\n'
+        "\n"
+        "IntentType: FETCH"
+    )
+    llm_recorder.set_response("openai", response)
+
+    raw_input = (
+        "Previous context:\nuser: What's the attack of pikachu?\n"
+        "assistant: Pikachu's base attack stat is **55**.\n\n"
+        "Current query: And what's the attack of Raichu?"
+    )
+    result = asyncio.run(clarify_and_refine_user_input(raw_input))
+
+    assert result["refinedQuery"] == "What is the base attack stat of Raichu?"
+    assert result["entities"] == ["raichu", "pokemon base stats", "Raichu details"]
+    assert result["intentType"] == "FETCH"
+    # The crucial negative assertion: previous-turn content must not leak
+    # into refinedQuery (that's what triggered the comparison expansion).
+    assert "Pikachu" not in result["refinedQuery"]
+    assert "55" not in result["refinedQuery"]
+
+
 def test_intent_type_modify_recognised(llm_recorder) -> None:
     response = """Refined Query: Add Pikachu to my watchlist
 Language: EN

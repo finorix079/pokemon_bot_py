@@ -11,9 +11,14 @@ ported from the TypeScript `/api/chat-stream` route in `open-react-template`. En
 The pipeline is a multi-stage LLM workflow (query refinement → planner → validator →
 iterative executor → streamed final answer) backed by three model providers:
 
-- **Anthropic Claude** (`claude-sonnet-4-5-20250929`) — planner, validator, executor synthesis, query refinement, placeholder resolver, final-answer streaming
-- **Kimi** (`kimi-k2-turbo-preview`) — per-step useful-data extraction, intent classifier
-- **OpenAI SDK** — kept only as the HTTP wrapper for the Kimi client (`KIMI_BASE_URL`); no OpenAI model is actually called
+- **Anthropic Claude** (`claude-sonnet-4-5-20250929`) — entire pipeline:
+  planner, validator, executor synthesis, query refinement, placeholder
+  resolver, final-answer streaming, per-step useful-data extraction,
+  intent classifier, message summarisation. `kimi_chat_completion` is kept
+  as a passthrough that forwards to `anthropic_chat_completion` so the
+  historical call sites keep working without a sweep.
+- **OpenAI SDK** — no longer used at runtime; the package may still appear
+  in dependencies but no model is called through it.
 
 All prompts in `pokemon_bot/prompts/` are byte-identical to the TS source; tests in
 `tests/test_executor_prompt.py` anchor that. Do not "improve" prompts without explicit

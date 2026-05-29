@@ -601,36 +601,22 @@ async def kimi_chat_completion(
     system_prompt: str = "",
     session_id: Optional[str] = None,
 ) -> str:
-    """Call Kimi (Moonshot) via the OpenAI-compatible API.
+    """Historical Kimi entrypoint — now forwards to Claude.
 
-    Mirrors TS `kimiChatCompletion`. The TS code hard-pins `model =
-    'kimi-k2-turbo-preview'` regardless of the caller's argument, and we
-    preserve that quirk for behaviour parity.
+    The four call sites (message summarisation, planner intent inference,
+    intent classifier, useful-data extraction) keep working without a
+    sweep; they just run on Claude now. The `model` argument is dropped
+    because callers pass Kimi model identifiers that Anthropic would
+    reject.
     """
-    _ = session_id  # observability sessionId is ignored in the CLI port
-    model = "kimi-k2-turbo-preview"
-    # Lazy import — openai SDK isn't required for unit tests that mock this.
-    from openai import OpenAI  # type: ignore[import-not-found]
-
-    cfg = _config.load()
-    client = OpenAI(api_key=cfg.kimi_api_key, base_url=cfg.kimi_base_url)
-    chat_messages: list[ChatMessage] = (
-        [{"role": "system", "content": system_prompt}, *messages]
-        if system_prompt
-        else list(messages)
+    _ = model
+    return await anthropic_chat_completion(
+        messages=messages,
+        temperature=temperature,
+        max_tokens=max_tokens,
+        system_prompt=system_prompt,
+        session_id=session_id,
     )
-    try:
-        response = client.chat.completions.create(
-            model=model,
-            messages=chat_messages,  # type: ignore[arg-type]
-            temperature=temperature,
-            max_tokens=max_tokens,
-        )
-        content = (response.choices[0].message.content or "").strip()
-        return content
-    except Exception as error:  # noqa: BLE001
-        print(f"Error in kimi_chat_completion: {error}")
-        raise
 
 
 async def anthropic_chat_completion(

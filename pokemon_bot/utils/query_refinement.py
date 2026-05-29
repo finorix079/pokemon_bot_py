@@ -189,11 +189,14 @@ IntentType: ["FETCH"/"MODIFY"]"""
 # Response-parser regexes — preserved verbatim from queryRefinement.ts:190-202
 # ---------------------------------------------------------------------------
 
-_REFINED_QUERY_RE = re.compile(r"Refined Query: (.+)\nLanguage:")
-_LANGUAGE_RE = re.compile(r"Language: (.+)\nConcepts:")
-_CONCEPTS_RE = re.compile(r"Concepts: \[(.+)\]\nAPI Needs:")
-_API_NEEDS_RE = re.compile(r"API Needs: \[(.+)\]\nEntities:")
-_ENTITIES_RE = re.compile(r"Entities: \[(.+)\]\nIntentType:")
+# `\n+` tolerates LLM outputs that put blank lines between sections.
+# Without it, a response like "Refined Query: foo\n\nLanguage: en" fails to
+# parse and the whole prompt input falls through as `refinedQuery`.
+_REFINED_QUERY_RE = re.compile(r"Refined Query: (.+?)\n+Language:")
+_LANGUAGE_RE = re.compile(r"Language: (.+?)\n+Concepts:")
+_CONCEPTS_RE = re.compile(r"Concepts: \[(.+?)\]\n+API Needs:")
+_API_NEEDS_RE = re.compile(r"API Needs: \[(.+?)\]\n+Entities:")
+_ENTITIES_RE = re.compile(r"Entities: \[(.+?)\]\n+IntentType:")
 _INTENT_TYPE_RE = re.compile(r"IntentType: (.+)")
 _QUOTE_STRIP_RE = re.compile(r"""['"]""")
 _CONTEXT_SPLIT_RE = re.compile(
