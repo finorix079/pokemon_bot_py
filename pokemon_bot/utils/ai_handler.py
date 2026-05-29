@@ -57,14 +57,14 @@ T = TypeVar("T", bound=Callable[..., Any])
 #
 # 2. **Explicit `wrap_ai`** (kept for parity and for any future LLM
 #    client that bypasses httpx). The helper below delegates to
-#    `elasticdash_test.interceptors.wrap_ai`, which records the full
+#    `elasticdash_sdk.interceptors.wrap_ai`, which records the full
 #    function-level input/output pair as a single `ai` WorkflowEvent.
 #    Use it only for providers the httpx interceptor doesn't cover —
 #    otherwise the dashboard will see a duplicate event per LLM call.
 
 
 try:
-    from elasticdash_test.interceptors import wrap_ai as _ed_wrap_ai  # type: ignore[import-not-found]
+    from elasticdash_sdk.interceptors import wrap_ai as _ed_wrap_ai  # type: ignore[import-not-found]
 except ImportError:  # pragma: no cover — SDK is a runtime dep but stay resilient
     _ed_wrap_ai = None  # type: ignore[assignment]
 
@@ -72,7 +72,7 @@ except ImportError:  # pragma: no cover — SDK is a runtime dep but stay resili
 def wrap_ai(name: str, fn: T, options: Optional[dict[str, str]] = None) -> T:
     """Record an LLM call as an `ai` event in the active trace.
 
-    Forwards to `elasticdash_test.interceptors.wrap_ai`. `options` carries
+    Forwards to `elasticdash_sdk.interceptors.wrap_ai`. `options` carries
     optional provider/model metadata — only `provider` is used by the SDK;
     `model` is informational and the recorded event keys on `name` instead.
     Falls back to a passthrough if the SDK is missing.

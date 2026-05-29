@@ -1,9 +1,8 @@
 {
   "mcpServers": {
     "elasticdash-mcp": {
-      "command": "/Users/jiangjiahao/.nvm/versions/node/v20.20.0/bin/node",
-      "args": ["--import", "tsx", "/Users/jiangjiahao/Documents/GitHub/ElasticDash-MCP/mcp-server/server.ts"],
-      "cwd": "/Users/jiangjiahao/Documents/GitHub/ElasticDash-MCP"
+      "command": "npx",
+      "args": ["-y", "elasticdash-mcp"]
     }
   }
 }

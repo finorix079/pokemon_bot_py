@@ -34,7 +34,7 @@ F = TypeVar("F", bound=Callable[..., Any])
 
 
 try:
-    from elasticdash_test import ed_tool as _ed_tool  # type: ignore[import-not-found]
+    from elasticdash_sdk import ed_tool as _ed_tool  # type: ignore[import-not-found]
 except ImportError:  # pragma: no cover — SDK is a runtime dep but stay resilient
     _ed_tool = None  # type: ignore[assignment]
 
@@ -42,7 +42,7 @@ except ImportError:  # pragma: no cover — SDK is a runtime dep but stay resili
 def wrap_tool(name: str, fn: F) -> F:
     """Register a tool with the ElasticDash SDK.
 
-    Uses `elasticdash_test.ed_tool(name=…)` which:
+    Uses `elasticdash_sdk.ed_tool(name=…)` which:
     1. Adds the function to the global rerun registry so the MCP server
        and `elasticdash run-tool <name> --input '<json>'` CLI can locate
        it for behaviour validation.

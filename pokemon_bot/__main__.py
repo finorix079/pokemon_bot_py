@@ -56,7 +56,7 @@ async def _maybe_init_observability() -> Any:
     if not server_url:
         return None
     try:
-        from elasticdash_test.observability import (
+        from elasticdash_sdk.observability import (
             init_observability,
             ObservabilityOptions,
         )
@@ -79,7 +79,7 @@ async def _maybe_init_observability() -> Any:
 
 def _start_trace_safe(name: str) -> None:
     try:
-        from elasticdash_test.observability import start_trace
+        from elasticdash_sdk.observability import start_trace
     except ImportError:
         return
     start_trace(name)
@@ -87,7 +87,7 @@ def _start_trace_safe(name: str) -> None:
 
 def _end_trace_safe() -> None:
     try:
-        from elasticdash_test.observability import end_trace
+        from elasticdash_sdk.observability import end_trace
     except ImportError:
         return
     end_trace()
