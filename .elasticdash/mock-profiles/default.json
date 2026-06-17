@@ -1,0 +1,2033 @@
+{
+  "name": "default",
+  "version": 3,
+  "default_mode": "mockAll",
+  "live_tools": [],
+  "mocked_tools_overrides": [
+    {
+      "tool": "queryRefinement",
+      "call_index": 1,
+      "output": {
+        "refinedQuery": "What is the base attack stat of Pikachu?",
+        "language": "en",
+        "concepts": [
+          "\"pokemon stats\"",
+          "\"base attack\"",
+          "\"specific pokemon query\""
+        ],
+        "apiNeeds": [
+          "\"database query\"",
+          "\"pokemon stats retrieval\""
+        ],
+        "entities": [
+          "[MOCK REFINEMENT] pikachu details",
+          "pikachu base stats"
+        ],
+        "intentType": "FETCH",
+        "referenceTask": null,
+        "_mock": true,
+        "_mock_disclaimer": "Replayed from elasticdash default mock profile."
+      }
+    },
+    {
+      "tool": "fetchPokemonDetails",
+      "call_index": 1,
+      "output": {
+        "success": true,
+        "_mock": true,
+        "_mock_source": "default profile (enriched from trace pokemon_chat::1781256971171::2fc5727d)",
+        "result": {
+          "id": 25,
+          "name": "pikachu (MOCK DATA)",
+          "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png",
+          "types": [
+            "electric"
+          ],
+          "abilities": [
+            {
+              "abilityName": "static",
+              "shortEffect": "Has a 30% chance of paralyzing attacking Pokémon on contact."
+            },
+            {
+              "abilityName": "lightning-rod",
+              "shortEffect": "Redirects single-target Electric moves to this Pokémon where possible.  Absorbs Electric moves, raising Special Attack one stage."
+            }
+          ],
+          "hp": 35,
+          "attack": 55,
+          "defense": 40,
+          "specialAttack": 50,
+          "specialDefense": 50,
+          "speed": 90,
+          "height": 0.4,
+          "weight": 6,
+          "baseExperience": 112,
+          "flavorText": "Possesses cheek sacs in which it stores electricity. This clever\nforest-dweller roasts tough berries with an electric shock before\nconsuming them.",
+          "_mock_disclaimer": "Replayed from elasticdash default mock profile — not live PokeAPI data.",
+          "moves": [
+            {
+              "name": "mega-punch",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "pay-day",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "thunder-punch",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "slam",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 28,
+              "moveMethod": "level-up"
+            },
+            {
+              "name": "double-kick",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 9,
+              "moveMethod": "level-up"
+            },
+            {
+              "name": "mega-kick",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "headbutt",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "body-slam",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "take-down",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "double-edge",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "tail-whip",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 1,
+              "moveMethod": "level-up"
+            },
+            {
+              "name": "growl",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 1,
+              "moveMethod": "level-up"
+            },
+            {
+              "name": "surf",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "stadium-surfing-pikachu"
+            },
+            {
+              "name": "submission",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "counter",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "tutor"
+            },
+            {
+              "name": "seismic-toss",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "strength",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "thunder-shock",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 1,
+              "moveMethod": "level-up"
+            },
+            {
+              "name": "thunderbolt",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "thunder-wave",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "thunder",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "dig",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "toxic",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "agility",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 33,
+              "moveMethod": "level-up"
+            },
+            {
+              "name": "quick-attack",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 16,
+              "moveMethod": "level-up"
+            },
+            {
+              "name": "rage",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "mimic",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "double-team",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "defense-curl",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "tutor"
+            },
+            {
+              "name": "light-screen",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "reflect",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "bide",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "swift",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "skull-bash",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "flash",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "rest",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "substitute",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "thief",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "snore",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "curse",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "reversal",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "protect",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "sweet-kiss",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 1,
+              "moveMethod": "level-up"
+            },
+            {
+              "name": "mud-slap",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "tutor"
+            },
+            {
+              "name": "zap-cannon",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "detect",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "endure",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "charm",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "rollout",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "tutor"
+            },
+            {
+              "name": "swagger",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "spark",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 20,
+              "moveMethod": "level-up"
+            },
+            {
+              "name": "attract",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "sleep-talk",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "return",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "frustration",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "dynamic-punch",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "tutor"
+            },
+            {
+              "name": "encore",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "iron-tail",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 28,
+              "moveMethod": "level-up"
+            },
+            {
+              "name": "hidden-power",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "rain-dance",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "rock-smash",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "uproar",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "facade",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "focus-punch",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "charge",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "helping-hand",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "brick-break",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "knock-off",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "endeavor",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "secret-power",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "fake-tears",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "signal-beam",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "tutor"
+            },
+            {
+              "name": "covet",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "tutor"
+            },
+            {
+              "name": "volt-tackle",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "tutor"
+            },
+            {
+              "name": "calm-mind",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "shock-wave",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "natural-gift",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "feint",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 16,
+              "moveMethod": "level-up"
+            },
+            {
+              "name": "fling",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "magnet-rise",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "tutor"
+            },
+            {
+              "name": "nasty-plot",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "discharge",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 32,
+              "moveMethod": "level-up"
+            },
+            {
+              "name": "captivate",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "grass-knot",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "charge-beam",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "electro-ball",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "round",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "echoed-voice",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "volt-switch",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "electroweb",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "wild-charge",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "disarming-voice",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "draining-kiss",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "play-rough",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "play-nice",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 1,
+              "moveMethod": "level-up"
+            },
+            {
+              "name": "confide",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "eerie-impulse",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "electric-terrain",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "nuzzle",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 1,
+              "moveMethod": "level-up"
+            },
+            {
+              "name": "laser-focus",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "tutor"
+            },
+            {
+              "name": "rising-voltage",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "tutor"
+            },
+            {
+              "name": "tera-blast",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "trailblaze",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "alluring-voice",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            },
+            {
+              "name": "upper-hand",
+              "type": null,
+              "power": null,
+              "accuracy": null,
+              "level": 0,
+              "moveMethod": "machine"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "diff_mode": "structural",
+  "recording": {
+    "queryRefinement": {
+      "1": {
+        "input": {
+          "userInput": "What's the attack of charizard",
+          "userToken": ""
+        },
+        "output": {
+          "refinedQuery": "What is the attack stat of Charizard?",
+          "language": "en",
+          "concepts": [
+            "pokemon stats",
+            "base attack stat",
+            "specific pokemon query"
+          ],
+          "apiNeeds": [
+            "database query for pokemon stats",
+            "pokemon species lookup"
+          ],
+          "entities": [
+            "charizard details",
+            "charizard base stats",
+            "pokemon attack stat"
+          ],
+          "intentType": "FETCH",
+          "referenceTask": null
+        }
+      }
+    },
+    "fetchPokemonDetails": {
+      "1": {
+        "input": {
+          "id": "charizard"
+        },
+        "output": {
+          "success": true,
+          "result": {
+            "id": 6,
+            "name": "charizard",
+            "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/6.png",
+            "types": [
+              "fire",
+              "flying"
+            ],
+            "abilities": [
+              {
+                "abilityName": "blaze",
+                "shortEffect": "Strengthens Fire moves to inflict 1.5× damage at 1/3 max HP or less."
+              },
+              {
+                "abilityName": "solar-power",
+                "shortEffect": "Increases Special Attack to 1.5× but costs 1/8 max HP after each turn during strong sunlight."
+              }
+            ],
+            "hp": 78,
+            "attack": 84,
+            "defense": 78,
+            "specialAttack": 109,
+            "specialDefense": 85,
+            "speed": 100,
+            "height": 1.7,
+            "weight": 90.5,
+            "baseExperience": 240,
+            "flavorText": "Its wings can carry this Pokémon close to an\naltitude of 4,600 feet. It blows out fire at very\nhigh temperatures.",
+            "moves": [
+              {
+                "name": "mega-punch",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "fire-punch",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "thunder-punch",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "scratch",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 1,
+                "moveMethod": "level-up"
+              },
+              {
+                "name": "swords-dance",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "cut",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "wing-attack",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 1,
+                "moveMethod": "level-up"
+              },
+              {
+                "name": "fly",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "mega-kick",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "headbutt",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "body-slam",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "take-down",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "double-edge",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "leer",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 15,
+                "moveMethod": "level-up"
+              },
+              {
+                "name": "bite",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "egg"
+              },
+              {
+                "name": "growl",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 1,
+                "moveMethod": "level-up"
+              },
+              {
+                "name": "roar",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "ember",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 9,
+                "moveMethod": "level-up"
+              },
+              {
+                "name": "flamethrower",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 46,
+                "moveMethod": "level-up"
+              },
+              {
+                "name": "hyper-beam",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "submission",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "counter",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "seismic-toss",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "strength",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "solar-beam",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "dragon-rage",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "fire-spin",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 55,
+                "moveMethod": "level-up"
+              },
+              {
+                "name": "earthquake",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "fissure",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "dig",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "toxic",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "rage",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "mimic",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "double-team",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "smokescreen",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 1,
+                "moveMethod": "level-up"
+              },
+              {
+                "name": "defense-curl",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "tutor"
+              },
+              {
+                "name": "reflect",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "bide",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "fire-blast",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "swift",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "skull-bash",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "fury-swipes",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 20,
+                "moveMethod": "level-up"
+              },
+              {
+                "name": "rest",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "rock-slide",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "slash",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 36,
+                "moveMethod": "level-up"
+              },
+              {
+                "name": "substitute",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "snore",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "curse",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "protect",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "scary-face",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "belly-drum",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "egg"
+              },
+              {
+                "name": "mud-slap",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "tutor"
+              },
+              {
+                "name": "outrage",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "sandstorm",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "endure",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "false-swipe",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "swagger",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "fury-cutter",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "tutor"
+              },
+              {
+                "name": "steel-wing",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "attract",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "sleep-talk",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "return",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "frustration",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "dynamic-punch",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "tutor"
+              },
+              {
+                "name": "dragon-breath",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 12,
+                "moveMethod": "level-up"
+              },
+              {
+                "name": "iron-tail",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "egg"
+              },
+              {
+                "name": "metal-claw",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "egg"
+              },
+              {
+                "name": "hidden-power",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "twister",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "tutor"
+              },
+              {
+                "name": "sunny-day",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "crunch",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "ancient-power",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "egg"
+              },
+              {
+                "name": "rock-smash",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "beat-up",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "heat-wave",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "will-o-wisp",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "facade",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "focus-punch",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "helping-hand",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "brick-break",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "secret-power",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "blaze-kick",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "blast-burn",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "weather-ball",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "air-cutter",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "overheat",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "rock-tomb",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "aerial-ace",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "dragon-claw",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "dragon-dance",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "roost",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "natural-gift",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "tailwind",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "tutor"
+              },
+              {
+                "name": "fling",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "flare-blitz",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "air-slash",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "dragon-pulse",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "dragon-rush",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "egg"
+              },
+              {
+                "name": "focus-blast",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "giga-impact",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "shadow-claw",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "fire-fang",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "defog",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "tutor"
+              },
+              {
+                "name": "captivate",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "ominous-wind",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "tutor"
+              },
+              {
+                "name": "hone-claws",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "flame-burst",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 32,
+                "moveMethod": "level-up"
+              },
+              {
+                "name": "flame-charge",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "round",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "echoed-voice",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "sky-drop",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "incinerate",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "acrobatics",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "inferno",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 54,
+                "moveMethod": "level-up"
+              },
+              {
+                "name": "fire-pledge",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "bulldoze",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "dragon-tail",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "work-up",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "heat-crash",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "hurricane",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "confide",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "mystical-fire",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "power-up-punch",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "brutal-swing",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "breaking-swipe",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "scale-shot",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "tutor"
+              },
+              {
+                "name": "dual-wingbeat",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "tutor"
+              },
+              {
+                "name": "scorching-sands",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "tera-blast",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "dragon-cheer",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              },
+              {
+                "name": "temper-flare",
+                "type": null,
+                "power": null,
+                "accuracy": null,
+                "level": 0,
+                "moveMethod": "machine"
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

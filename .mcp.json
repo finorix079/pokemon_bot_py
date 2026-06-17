@@ -1,9 +1,12 @@
 {
   "mcpServers": {
     "elasticdash-mcp": {
-      "command": "node",
-      "args": ["/Users/jiangjiahao/Documents/GitHub/elasticdash-mcp/dist/mcp-server/server.js"],
-      "cwd": "/Users/jiangjiahao/Documents/GitHub/elasticdash-mcp"
+      "command": "npx",
+      "args": ["-y", "elasticdash-mcp@0.0.7"],
+      "cwd": "/Users/jiangjiahao/Documents/GitHub/pokemon_bot_py",
+      "env": {
+        "ELASTICDASH_PROJECT_CWD": "/Users/jiangjiahao/Documents/GitHub/pokemon_bot_py"
+      }
     }
   }
 }
